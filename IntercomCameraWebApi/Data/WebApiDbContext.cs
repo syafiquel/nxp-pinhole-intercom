@@ -1,0 +1,55 @@
+using Microsoft.EntityFrameworkCore;
+using IntercomCameraWebApi.Models;
+
+namespace IntercomCameraWebApi.Data
+{
+    public class WebApiDbContext : DbContext
+    {
+        public WebApiDbContext(DbContextOptions<WebApiDbContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WebApiData>()
+                .ToTable("ip_camera", schema: "trx");
+
+            modelBuilder.Entity<WebApiData>().HasData(
+                new WebApiData { Id = 1, Name = "B2-01-L", Block = "B2-01", IP = "192.168.0.10", IntercomIP = "192.168.0.101", Type = "Entry", Status = "Active", URL = "http://192.168.0.10/live/192.168.0.10/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 2, Name = "B2-01-C", Block = "B2-01", IP = "192.168.0.100", IntercomIP = "192.168.0.102", Type = "Entry", Status = "Active", URL = "http://192.168.0.100/live/192.168.0.100/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 3, Name = "B2-01-R", Block = "B2-01", IP = "192.168.0.11", IntercomIP = "192.168.0.111", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.11/live/192.168.0.11/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 4, Name = "B2-02-L", Block = "B2-02", IP = "192.168.0.18", IntercomIP = "192.168.0.118", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.18/live/192.168.0.18/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 5, Name = "B2-02-C", Block = "B2-02", IP = "192.168.0.19", IntercomIP = "192.168.0.119", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.19/live/192.168.0.19/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 6, Name = "B2-02-R", Block = "B2-02", IP = "192.168.0.20", IntercomIP = "192.168.0.120", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.20/live/192.168.0.20/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 7, Name = "B2-03-L", Block = "B2-03", IP = "192.168.0.21", IntercomIP = "192.168.0.121", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.21/live/192.168.0.21/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 8, Name = "B2-03-R", Block = "B2-03", IP = "192.168.0.22", IntercomIP = "192.168.0.122", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.22/live/192.168.0.22/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 9, Name = "B2-M-L", Block = "B2-MULIA", IP = "192.168.0.23", IntercomIP = "192.168.0.123", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.23/live/192.168.0.23/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 10, Name = "B2-M-R", Block = "B2-MULIA", IP = "192.168.0.24", IntercomIP = "192.168.0.124", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.24/live/192.168.0.24/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 11, Name = "B2-04-L", Block = "B2-04", IP = "192.168.0.25", IntercomIP = "192.168.0.125", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.25/live/192.168.0.25/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 12, Name = "B2-04-R", Block = "B2-04", IP = "192.168.0.26", IntercomIP = "192.168.0.126", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.26/live/192.168.0.26/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 13, Name = "B2-05-L", Block = "B2-05", IP = "192.168.0.27", IntercomIP = "192.168.0.127", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.27/live/192.168.0.27/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 14, Name = "B2-05-R", Block = "B2-05", IP = "192.168.0.28", IntercomIP = "192.168.0.128", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.28/live/192.168.0.28/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 15, Name = "MZ-01-R", Block = "MEZZANINE", IP = "192.168.0.29", IntercomIP = "192.168.0.129", Type = "Entry", Status = "Inactive", URL = "http://192.168.0.29/live/192.168.0.29/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 16, Name = "MZ-02-R", Block = "MEZZANINE", IP = "192.168.0.30", IntercomIP = "192.168.0.130", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.30/live/192.168.0.30/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 17, Name = "B1-01-L", Block = "B1-01", IP = "192.168.0.31", IntercomIP = "192.168.0.131", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.31/live/192.168.0.31/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 18, Name = "B1-01-C", Block = "B1-01", IP = "192.168.0.32", IntercomIP = "192.168.0.132", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.32/live/192.168.0.32/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 19, Name = "B1-01-R", Block = "B1-01", IP = "192.168.0.33", IntercomIP = "192.168.0.133", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.33/live/192.168.0.33/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 20, Name = "B1-02-L", Block = "B1-02", IP = "192.168.0.34", IntercomIP = "192.168.0.134", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.34/live/192.168.0.34/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 21, Name = "B1-02-R", Block = "B1-02", IP = "192.168.0.35", IntercomIP = "192.168.0.135", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.35/live/192.168.0.35/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 22, Name = "B1-02-R", Block = "B1-02", IP = "192.168.0.36", IntercomIP = "192.168.0.136", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.36/live/192.168.0.36/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 23, Name = "B1-03-L", Block = "B1-03", IP = "192.168.0.37", IntercomIP = "192.168.0.137", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.37/live/192.168.0.37/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 24, Name = "B1-03-R", Block = "B1-03", IP = "192.168.0.38", IntercomIP = "192.168.0.138", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.38/live/192.168.0.38/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 25, Name = "B1-M-R", Block = "B1-MULIA", IP = "192.168.0.39", IntercomIP = "192.168.0.139", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.39/live/192.168.0.39/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 26, Name = "B1-M-L", Block = "B1-MULIA", IP = "192.168.0.40", IntercomIP = "192.168.0.140", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.40/live/192.168.0.40/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 27, Name = "B1-04-L", Block = "B1-04", IP = "192.168.0.41", IntercomIP = "192.168.0.141", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.41/live/192.168.0.41/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 28, Name = "B1-04-C", Block = "B1-04", IP = "192.168.0.42", IntercomIP = "192.168.0.142", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.42/live/192.168.0.42/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 29, Name = "B1-04-R", Block = "B1-04", IP = "192.168.0.43", IntercomIP = "192.168.0.143", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.43/live/192.168.0.43/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 30, Name = "B1-06-R", Block = "B1-06", IP = "192.168.0.44", IntercomIP = "192.168.0.144", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.44/live/192.168.0.44/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" },
+                new WebApiData { Id = 31, Name = "B1-07-R", Block = "B1-07", IP = "192.168.0.45", IntercomIP = "192.168.0.145", Type = "Exit", Status = "Inactive", URL = "http://192.168.0.45/live/192.168.0.45/cgi-bin/jpegpush.cgi?0.8399984956352915&user_enc=db69fc039dcbd2962cb4d28f5891aae1&pwd_enc=6efdcd304b1a8971be971754bad21ba0" }
+            );
+        }
+
+        public DbSet<WebApiData> WebApiData { get; set; }
+    }
+}

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <title>IP Camera Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+
+      #floor-plan-content {
+        position: relative;
+        display: inline-block;
+      }
+    
+      #poi-marker {
+        position: absolute;
+        top: 100 px;
+        left: 200px;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+        z-index: 999;
+        display: none;
+        animation: blink 0.5s infinite;
+      }
+
+      @Html.Raw("@")keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4 mt-4">
+          <div class="text-center mb-4">
+            <h3>Total Cameras</h3>
+            <h1>@ViewData["total_cameras"]</h1>
+          </div>
+          <div class="mb-4">
+            <h5>Camera Status</h5>
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                Total Cameras Online
+                <span class="badge bg-success me-2 rounded-pill">@ViewData["total_online"]</span>
+                </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                Total Cameras Offline
+                <span class="badge bg-danger rounded-pill">@ViewData["total_offline"]</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mb-4 overflow-auto" style="max-height: 250px;">
+            <h5>Camera Block Status (Entry)</h5>
+            <ul class="list-group">
+                @{ var entryData = @ViewData["data"]; }
+                @foreach(var datum in (dynamic) entryData) {
+                  @if( datum.Type == "Entry") {
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                      <div class="d-flex justify-content-start">
+                        <span>@datum.Name</span>
+                      </div>
+                      <div class="d-flex justify-content-end">
+                        @{ var status = (datum.Status == "Active") ? true: false; }
+                        @if( @status ) {
+                          <span class="badge bg-success me-2 rounded-pill">Online</span>
+                        }
+                        else {
+                          <span class="badge bg-danger me-2 rounded-pill">Offline</span>
+                        }
+                      </div>
+                    </li>
+                  }
+                }
+            </ul>
+          </div>
+          <div class="mb-4 overflow-auto" style="max-height:250px;">
+            <h5>Camera Block Status (Exit)</h5>
+            <ul class="list-group">
+                @{ var exitData = @ViewData["data"]; }
+                @foreach(var datum in (dynamic) exitData) {
+                  @if( datum.Type == "Exit") {
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                      <div class="d-flex justify-content-start">
+                        <span>@datum.Name</span>
+                      </div>
+                      <div class="d-flex justify-content-end">
+                        @{ var status = (datum.Status == "Active") ? true: false; }
+                        @if( @status ) {
+                          <span class="badge bg-success me-2 rounded-pill">Online</span>
+                        }
+                        else {
+                          <span class="badge bg-danger me-2 rounded-pill">Offline</span>
+                        }
+                      </div>
+                    </li>
+                  }
+                  
+                }
+            </ul>
+          </div>
+        </div>
+        <div class="col-8 mt-4">
+          <div class="card">
+            <div class="card-header">Camera View</div>
+            <div id="image-container" class="card-body">
+              <h3 id="default-image" class="py-4 text-center">No image available</h3>
+              <img id="camera1" style="display:none;width:1020px;height:480px" />
+            </div>
+          </div>
+          <div class="my-4">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" id="table-tab" data-bs-toggle="tab" href="#table-content">Camera Info</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="floor-plan-tab" data-bs-toggle="tab" href="#floor-plan-content">Floor Mapping</a>
+              </li>
+            </ul>
+            <div class="tab-content my-3">
+              <div class="tab-pane fade show active" id="table-content">
+                <table id="tbl-cam" class="table">
+                  <thead>
+                    <tr>
+                      <th>Camera ID</th>
+                      <th>IP Address</th>
+                      <th>Name</th>
+                      <th>Block</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                <h3 id="default-table" class="py-4 text-center">No info available</h3>
+              </div>
+              <div class="tab-pane fade" id="floor-plan-content">
+                <h3 id="default-floor-plan" class="py-4 text-center">No image available</h3>
+                <img id=floor-plan-image src="http://192.168.0.12/api/asset?name=Sample_B1.png" alt="B1" class="img-fluid" style="display:none">
+                <div id="poi-marker"></div>
+              </div>
+            </div>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        const imageContainer = document.getElementById("image-container");
+        imageContainer.style.height = "480px";
+        const socket = new WebSocket("ws://localhost:5000/api/ws");
+        const counter = 0;
+        const cameras = [];
+        const data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewData["data"]));
+
+        socket.onopen = () => {
+            console.log("WebSocket connection opened");
+            socket.send("hello");
+
+        };
+
+        socket.onmessage = (event) => {
+            if(isJson(event.data)) {
+              
+              const imgFloorPlan = document.getElementById("floor-plan-image");
+              const imgElement = document.getElementById("camera1");
+              const raw = JSON.parse(event.data);
+              var data;
+              try {
+                data = JSON.parse(raw[1]);
+              } catch(e) {  }
+              
+              if(raw[0] === "reload") {
+                window.location.reload();
+
+              }
+             
+              if(raw[0] === "outgoing") {
+                if(cameras.length > 2 || cameras.includes(data.IP))
+                  return;
+                cameras.push(data.IP);
+              }
+
+
+              else if(raw[0] === "established" && cameras.length > 1) {
+                const tbl = document.getElementById('tbl-cam').getElementsByTagName('tbody')[0];
+                const cams = document.querySelectorAll('[id*="camera"]');
+                if(cams.length === 1) {
+                  cams[0].src = data.URL;
+                  tbl.deleteRow(0);
+                  const row = tbl.insertRow();
+
+                  const cellId = row.insertCell(0);
+                  const cellIp = row.insertCell(1);
+                  const cellName = row.insertCell(2);
+                  const cellLocation = row.insertCell(3);
+                  const cellType = row.insertCell(4);
+                  const cellStatus = row.insertCell(5);
+                  const cellTimestamp = row.insertCell(6);
+
+                  cellId.innerHTML = data.Id;
+                  cellIp.innerHTML = data.IP;
+                  cellName.innerHTML = data.Name;
+                  cellLocation.innerHTML = data.Block;
+                  cellType.innerHTML = data.Type;
+                  cellStatus.innerHTML = data.Status;
+                  cellTimestamp.innerHTML = data.CreatedAt;
+                }
+
+                else if(cams.length === 2) {
+                  const cam1 = document.getElementById("camera1");
+                  const cam2 = document.getElementById("camera2");
+                  if(cam1.src === data.URL)
+                    cam2.style.display = "none";
+                  else if(cam2.src === data.URL)
+                    cam1.style.display = "none";
+                  imgElement.style.width = "1020px";
+                  const tbl = document.getElementById('tbl-cam').getElementsByTagName('tbody')[0];
+                  if(tbl.rows[1].cells[0].innerHTML === data.Id) {
+                    tbl.rows[2].style.display = "none";
+                  }
+
+                  else if(tbl.rows[2].cells[0].innerHTML === data.Id) {
+                    tbl.rows[1].style.display = "none";
+                  }
+                }
+                
+              }
+              
+              if(cameras.length >= 0 && cameras.length < 3) {
+                const defaultImage = document.getElementById("default-image");
+                const defaultTable = document.getElementById("default-table");
+                const defaultFloorPlan = document.getElementById("default-floor-plan");
+                const poiMarker = document.getElementById("poi-marker");
+                const imgWidth = imgFloorPlan.width;
+                const imgHeight = imgFloorPlan.height;
+                defaultImage.style.display = "none";
+                defaultTable.style.display = "none";
+                defaultFloorPlan.style.display = "none";
+                poiMarker.style.display = "block";
+                poiMarker.style.top = '100px';
+                poiMarker.style.left = '150px';
+
+              }
+
+              if (cameras.length === 1) {
+                imageContainer.classList.add('p-2');
+              } else if (cameras.length === 2 && raw[0] === "outgoing") {
+                imageContainer.style.width = "100%";
+                imageContainer.style.height = "100%";
+                imageContainer.style.display = "flex";
+                imageContainer.style.justifyContent = "space-between";
+                imageContainer.classList.add('p-2');
+              }
+
+              imgFloorPlan.style.display = "block";
+              imgFloorPlan.addEventListener('click', function(e) {
+                  const rect = imgFloorPlan.getBoundingClientRect();
+                  console.log(e.clientX - rect.left);
+                  console.log(e.clientY - rect.top);
+              });
+
+              if(raw[0] === "terminated") {
+                const defaultImage = document.getElementById("default-image");
+                const defaultTable = document.getElementById("default-table");
+                
+                const cams = document.querySelectorAll('[id*="camera"]');
+                const tbl = document.getElementById("tbl-cam");
+                const id = cams[0].id;
+                const cam = document.getElementById(id);
+                if(cams.length === 1) {
+                  defaultImage.style.display = "block";
+                  defaultTable.style.display = "block";
+                  cam.style.display = "none";
+                   imageContainer.style.height = "480px";
+                  tbl.deleteRow(1);
+                }
+
+                else if(cams.length === 2) {
+                  for(let i = 0; i < tbl.rows.length; i++) {
+
+                    const cell = tbl.rows[i].cells[1];
+                    const value = cell.innerHTML;
+                    if(value === data.IP && tbl.rows.length === 3) {
+                      const pos = tbl.rows[i].cells[0];
+                      tbl.deleteRow(pos.innerHTML);
+                      cam.remove();
+                    }
+
+                    else if(value === data.IP && tbl.rows.length === 2) {
+                      tbl.deleteRow(1);
+                    }
+
+                  }
+                  const tcams = document.querySelectorAll('[id*="camera"]');
+                  if(tcams[0].id === "camera2" ) {
+                    tcams[0].id = "camera1";
+                  }
+                  if(tcams[0].style.display === "none") {
+                    tcams[0].style.display = "block";
+                  }
+                }
+                const index = cameras.indexOf(data.IP);
+                if(index !== -1) {
+                  cameras.splice(index, 1);
+                }
+                
+              }
+              
+
+              if(cameras.length === 1 && raw[0] === "outgoing" ) {
+                imgElement.style.display = "block";
+                imgElement.src = data.URL;
+                imgElement.classList.add('p-2');
+                imageContainer.appendChild(imgElement);
+              }
+              else if (cameras.length === 2 && raw[0] === "outgoing") {
+                imgElement.style.width = "560px";
+                imgElement.style.height = "480px";
+                const camera2 = document.createElement("img");
+                camera2.setAttribute("id", "camera2");
+                camera2.classList.add('p-2');
+                camera2.src = data.URL;
+                camera2.style.width = "560px";
+                camera2.style.height = "480px";
+                imageContainer.appendChild(camera2);
+              } 
+              if(raw[0] === "outgoing" && cameras.length >= 0 && cameras.length < 3) {
+                const tbl = document.getElementById('tbl-cam').getElementsByTagName('tbody')[0];
+                const row = tbl.insertRow();
+
+                const cellId = row.insertCell(0);
+                const cellIp = row.insertCell(1);
+                const cellName = row.insertCell(2);
+                const cellLocation = row.insertCell(3);
+                const cellType = row.insertCell(4);
+                const cellStatus = row.insertCell(5);
+                const cellTimestamp = row.insertCell(6);
+
+                cellId.innerHTML = data.Id;
+                cellIp.innerHTML = data.IP;
+                cellName.innerHTML = data.Name;
+                cellLocation.innerHTML = data.Block;
+                cellType.innerHTML = data.Type;
+                cellStatus.innerHTML = data.Status;
+                cellTimestamp.innerHTML = data.CreatedAt;
+              }
+
+            }
+        };
+
+        socket.onerror = (event) => {
+            console.error("WebSocket error:", event);
+        };
+
+        socket.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        function isJson(str) {
+            try {
+              JSON.parse(str);
+            } catch(e) {
+              return false;
+            }
+            return true;
+        }
+    </script>
+  </body>
+  </html>
