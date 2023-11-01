@@ -266,6 +266,7 @@ namespace IntercomCameraWebApi.Controllers
             WebApiDbContext dbContext = new WebApiDbContext(optionsBuilder.Options);
             try {
                     var data = dbContext.WebApiData.ToList();
+                    Console.WriteLine(data);
                     foreach(var datum in data) {
                         contextData = datum;
                         var pinholeUrl = datum.URL;
@@ -296,6 +297,7 @@ namespace IntercomCameraWebApi.Controllers
             }
 
             catch(Exception ex) {
+                Console.WriteLine("timer else")
                 var entity = dbContext.WebApiData.Find(contextData.Id);
                 entity.Status = (status) ? "Active" : "Inactive";
                 await UpdateDb(dbContext);
